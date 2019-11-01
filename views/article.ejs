@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+
+		<link rel="stylesheet" href="../public/css/commont.css">
+		<link rel="stylesheet" href="../public/css/public.css">
+	</head>
+	<body>
+		<div class="toptop">
+			<h1 class="h1">欢迎<span class="user"><%= user %></span>	
+				<input class="bt" type="submit" value="退出">
+			</h1>
+			
+		</div>
+		
+		<div class="topnav">
+			<ul class="uls">
+				<a href="http://10.25.160.69:8989/list" class="nav-a">首页</a>
+				<a href="#" class="nav-a nav-active">Blog留言</a>
+				<a href="http://10.25.160.69:8989/chat" class="nav-a">聊天室</a>
+				
+			</ul>
+		</div>
+		<div class="box">
+			<h2 class="header">
+				您现在的位置是：<a href="#">Blog留言</a>
+			</h2>
+			<div class="article">
+				<div class="tip">
+					<!-- 请输入您想要说的话~ -->
+				</div>
+				<textarea name="" id="textarea1" cols="50" rows="10"></textarea>
+				<div class="textarea-bottom">
+					<button class="btns">发布</button>
+				</div>
+				<div class="type-list">
+					<span class="type-list-active">评论</span>
+					<span class="type-line">我是分割线~-~</span>
+				</div>
+
+				<ul class="comments"></ul>
+				<div class="more">
+					点击加载更多
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+		<script src="../public/js/jquery-1.11.1.js"></script>
+		<script>
+			var user=$('.user').html()
+			var num=0;
+			$.ajax({
+				url:'http://10.25.160.69:8989/article1',
+				method:'get',
+				data:{num:num}, 
+				dataType:'json',
+				success:function(data){
+					console.log(data)
+					for(let i=0;i<data.length;i++){
+						let del=$('<div class="dels"></div>')
+						let tag=$('<li></li>')
+						tag.html(`
+								<div class="userInfo">
+									<img src="${data[i].img}" class="images" alt="">
+
+									<span class="name">${data[i].name}</span>
+									<span class="date">${data[i].date}</span>
+									<span class="none">${data[i]._id}</span>
+								</div>
+								<div class="text">${data[i].text}</div>
+							`)
+						$('.comments').append(tag)
+						
+						del.html(`<span class="del" onclick="del(this)">X</span>`)
+						if(user==data[i].name){
+							tag.append(del)	
+						}
+						
+					}
+				}	
+			})
+			let fb=`<a href="http://10.25.160.69:8989/fabu" class="nav-a">发布</a>`
+			if($('.user').html()=='asd'){
+				$('.uls').append(fb)	
+
+			}		
+			$('.btns').click(function(event){
+				if($('#textarea1').val()!=''){
+					$.ajax({
+						url:'http://10.25.160.69:8989/article1',
+						method:'POST',
+						data:{
+							text:$('#textarea1').val()
+						},
+						dataType:'json',
+						success:function(data){
+							let del=$('<div class="dels"></div>')
+							let tag=$('<li></li>')
+							tag.html(`
+									<div class="userInfo">
+										<img src="${data[0].img}" class="images" alt="">
+										<span class="name">${data[0].name}</span>
+										<span class="date">${data[0].date}</span>
+										<span class="none">${data[0]._id}</span>
+									</div>
+									<div class="text">${data[0].text}</div>
+								`)
+							$('.comments').prepend(tag)
+
+							del.html(`<span class="del" onclick="del(this)">X</span>`)
+							if(user==data[0].name){
+								tag.append(del)	
+							}
+							if($('.comments li').length==10){
+								$('.comments li:last-child').remove()
+							}
+							
+						}	
+					})
+				}
+					
+					
+				$('#textarea1').val('')
+			})
+			function del(a){
+				$.ajax({
+						url:'http://10.25.160.69:8989/delcomment',
+						method:'POST',
+						data:{
+							id:$(a).parent().siblings().children('.none').html()
+						},
+						dataType:'json',
+						success:function(data){
+							$(a).parent('div').parent('li').remove()
+						}	
+					})
+
+			}
+			$('.more').click(function(event) {
+				num=num+10;
+				console.log(num)
+				$.ajax({
+					url:'http://10.25.160.69:8989/article1',
+					method:'get',
+					data:{num:num},
+					dataType:'json',
+					success:function(data){
+						console.log(num)
+						for(let i=0;i<data.length;i++){
+							let del=$('<div class="dels"></div>')
+							let tag=$('<li></li>')
+							tag.html(`
+									<div class="userInfo">
+										<img src="${data[0].img}" class="images" alt="">
+										<span class="name">${data[i].name}</span>
+										<span class="date">${data[i].date}</span>
+										<span class="none">${data[i]._id}</span>
+									</div>
+									<div class="text">${data[i].text}</div>
+								`)
+							$('.comments').append(tag)
+							
+							del.html(`<span class="del" onclick="del(this)">X</span>`)
+							if(user==data[i].name){
+								tag.append(del)	
+							}
+							
+						}
+					}	
+				})
+			});
+		</script>
+	</body>
+</html>

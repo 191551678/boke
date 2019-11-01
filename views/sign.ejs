@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../public/css/my.css">
+</head>
+<body>
+<div class="basic-grey">
+	<form action="http://10.25.160.69:8989/sign" method="post">
+		<h1>这是注册页面</h1>
+		<div class="upload-container">
+		    <input type="file" name="fileToUpload" id="fileToUpload" class="fileupload" required />
+		</div>
+		<input class="ipt" type="text" name="user" placeholder="请输入用户名" maxlength="7">
+		<input class="ipt" type="password" name="pass" placeholder="请输入密码" required>
+		
+		<!-- <input class="button" type="submit"> -->
+	</form>
+	<button class="button">注册</button>
+	<a class="btna" href="<%= url %>">登录</a>
+	<div class="signno">
+	</div>
+	
+</div>
+	
+		
+	<script src="../public/js/jquery-1.11.1.js"></script>
+	<script>
+		$('.button').click(function(event) {
+		    if ($('.fileupload').val()!='') {
+		        var fileName = $('.fileupload').val();
+		        var extension = fileName.substring(fileName.lastIndexOf('.'), fileName.length).toLowerCase();
+		        if (extension == ".jpg" || extension == ".png") {
+		                var data = new FormData();
+		                data.append('upload', $('#fileToUpload')[0].files[0]);
+		                // console.log(data)
+		                 $.ajax({
+		                    url: 'http://10.25.160.69:8989/upload',
+		                    type: 'POST',
+		                    data: data,
+		                    cache: false,
+		                    contentType: false, //不可缺参数
+		                    processData: false, //不可缺参数
+		                    success: function(data) {
+		                        let img= data.msg;
+		                         $.ajax({
+				                    url: 'http://10.25.160.69:8989/sign',
+				                    type: 'POST',
+				                    data: {
+				                    	img:img,
+				                    	user:$('.ipt').eq(0).val(),
+										pass:$('.ipt').eq(1).val()
+				                    },
+									dataType:'json',
+				                    success: function(a) {
+				                    	console.log(a)
+				                       if(a.msg==0){
+				                       		location.href="http://10.25.160.69:8989/"
+				                       }else{
+				                       		$('.signno').html(`用户已存在`)
+				                       }
+				                    }  
+				                 })
+		                    },
+		                    error: function() {
+		                        console.log('error');
+		                    }
+		                });
+		        }
+		    }else{
+                 $.ajax({
+                    url: 'http://10.25.160.69:8989/sign',
+                    type: 'POST',
+                    data: {
+                    	img:'',
+                    	user:$('.ipt').eq(0).val(),
+						pass:$('.ipt').eq(1).val()
+                    },
+					dataType:'json',
+                    success: function(a) {
+                       console.log(a)
+                       if(a.msg==0){
+                       		location.href="http://10.25.160.69:8989/"
+                       }else{
+                       		$('.signno').html(`用户已存在`)
+                       }
+                    }  
+                 })
+		    }
+		})
+
+		$('input').focus(function(event) {
+			$('.signno').html('')
+		});
+	</script>
+
+</body>
+</html>

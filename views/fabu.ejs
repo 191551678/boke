@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<link rel="stylesheet" href="../public/css/public.css">
+		<link rel="stylesheet" href="../public/css/fb.css">
+	</head>
+	<body>
+		<div class="toptop">
+			<h1 class="h1">欢迎<span class="user"><%= user %></span>	
+				<input class="bt" type="submit" value="退出">
+			</h1>
+			
+		</div>
+		
+		<div class="topnav">
+			<ul class="uls">
+				<a href="http://10.25.160.69:8989/list" class="nav-a">首页</a>
+				<a href="http://10.25.160.69:8989/article" class="nav-a">Blog留言</a>
+				<a href="http://10.25.160.69:8989/chat" class="nav-a">聊天室</a>
+				<a href="#" class="nav-a nav-active">发布</a>
+			</ul>
+		</div>
+		<div class="box">
+			<h2 class="header">
+				您现在的位置是：<a href="#">发布</a>
+			</h2>
+		</div>
+		<div class="fb-box">
+			<label for="title"></label><input type="text" name="title" class="fb-title" placeholder="标题">
+			<textarea name="" class="fb-content" cols="50" rows="10"></textarea>
+			<div class="upload-container">
+			    <input type="file" name="fileToUpload" id="fileToUpload" class="fileupload" style="visibility:hidden;position:absolute;top:0px;width:0px" />
+			    
+			</div>
+			<button class="upimg-btn">Pic</button>
+			<button class="fb-btn">发布</button>
+		</div>
+		<div class="space"></div>
+	
+		<script src="../public/js/jquery-1.11.1.js"></script>
+
+		<script>
+			var tags=1;
+			
+			$('.upimg-btn').click(function(event) {
+				$('#fileToUpload').click()
+			});
+			$('.fb-btn').click(function(event) {
+				var r=confirm("确认发布？");
+				if($('.fb-content').val!=''&&$('.fb-title').val!=''){
+					if (r==true){
+
+					 	console.log(true)
+		        		if ($('.fileupload').val().length) {
+
+					        var fileName = $('.fileupload').val();
+					        var extension = fileName.substring(fileName.lastIndexOf('.'), fileName.length).toLowerCase();
+					        if (extension == ".jpg" || extension == ".png") {
+					                var data = new FormData();
+					                console.log('进来了1')
+					                data.append('upload', $('#fileToUpload')[0].files[0]);
+					                $.ajax({
+					                    url: 'http://10.25.160.69:8989/upload',
+					                    type: 'POST',
+					                    data: data,
+					                    cache: false,
+					                    contentType: false, //不可缺参数
+					                    processData: false, //不可缺参数
+					                    success: function(data) {
+					                        console.log(data);
+					                        // let tag=$('<img />')
+					                        // tag.attr('src',data.msg)
+					                        // $('body').append(tag)
+					                        
+					                        let img= data.msg;
+					                         $.ajax({
+							                    url: 'http://10.25.160.69:8989/fabu',
+							                    type: 'POST',
+							                    data: {
+							                    	img:img,
+							                    	title:$('.fb-title').val(),
+													content:$('.fb-content').val()
+							                    },
+												dataType:'json',
+							                    success: function(data) {
+							                       // location.href="http://10.25.160.69:8989/"
+							                    }  
+							                 })
+					                    },
+					                    error: function() {
+					                        console.log('error');
+					                    }
+					                });
+					        }
+					    }else{
+					    	console.log('进来了2')
+					    	console.log($('.fb-title').val())
+					    	console.log($('.fb-content').val())
+					    	$.ajax({
+			                    url: 'http://10.25.160.69:8989/fabu',
+			                    type: 'POST',
+			                    data: {
+			                    	img:'',
+			                    	title:$('.fb-title').val(),
+									content:$('.fb-content').val()
+			                    },
+								dataType:'json',
+			                    success: function(data) {
+			                      
+			                    }  
+			                 })
+					    }
+
+				    }
+				    else{
+				       console.log(false)
+				    }
+				}
+				
+			});
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</script>
+	</body>
+</html>

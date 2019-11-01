@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<link rel="stylesheet" href="../public/css/public.css">
+		<link rel="stylesheet" href="../public/css/chat.css">
+	</head>
+	<body>
+		<div class="toptop">
+			<h1 class="h1">欢迎<span class="user"><%= user %></span>		
+				<form class="in-form" action="http://10.25.160.69:8989/esc" method="get">
+					<input class="bt" type="submit" value="退出">
+				</form>
+			</h1>
+			
+		</div>
+		
+		<div class="topnav">
+			<ul class="uls">
+				<a href="http://10.25.160.69:8989/list" class="nav-a">首页</a>
+				<a href="http://10.25.160.69:8989/article" class="nav-a">Blog留言</a>
+				<a href="http://10.25.160.69:8989/chat" class="nav-a nav-active">聊天室</a>
+				
+			</ul>
+		</div>
+		<div class="box">
+			<h2 class="header">
+				您现在的位置是：<a href="#">聊天室</a>
+			</h2>
+		</div>
+
+		<div class="content-box">
+			<img src="../public/assets/pic1.jpg" class="pic1" alt="">
+			<img src="../public/assets/pic2.jpg" class="pic2" alt="">
+			<div class="chat-box">
+				<ul id="chats">
+					
+				</ul>
+			</div>
+			<textarea name="" id="textarea1" cols="30" rows="10"></textarea>
+		</div>
+
+		<div class="space"></div>
+		
+		
+
+		<script src="../public/js/jquery-1.11.1.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			let socket=io()
+			$('#textarea1').keydown(function(event){
+				if(event.keyCode==13){
+					socket.emit('send',{msg:$(this).val(),user:$('.user').html()})
+
+					// $.ajax({
+					// 	url:'http://10.25.160.69:8989/imgs',
+					// 	method:'post',
+					// 	data:{name:$('.user').html()},
+					// 	dataType:'json',
+					// 	success:function(data){
+					// 		console.log(data[0].img)
+	    //                     $('.images').attr('src',data[0].img)
+
+					// 	}
+					// })
+
+				}
+			})
+			var arr1=[]
+			socket.on('chat',(msg)=>{
+				
+				console.log(msg.user)
+				let tag=$('<li class="lis"></li>')
+				// tag.html(`<img class="images" />${msg.user}：${msg.msg}`)
+				// if(msg.user==$('.user').html()){
+				// 	tag.addClass('my')
+				// 	tag.html(`<span class="texts">${msg.msg}</span> <img class="images" />`)
+					
+				// }
+				// $('#chats').append(tag)
+				$.ajax({
+					url:'http://10.25.160.69:8989/imgs',
+					method:'post',
+					data:{name:msg.user},
+					dataType:'json',
+					success:function(data){
+	
+                        // $('.images').attr('src',data[0].img)
+                        let dts=[
+									{
+										user:msg.user,
+										msg:msg.msg,
+										img:data[0].img
+									}
+								]
+						arr1.push(dts)
+						// console.log(arr1.slice(-1)[0][0].user)
+						// console.log(arr1.slice(-1)[0][0].msg)
+						// console.log(arr1.slice(-1)[0][0].img)
+						let dds={
+							user:arr1.slice(-1)[0][0].user,
+							msg:arr1.slice(-1)[0][0].msg,
+							img:arr1.slice(-1)[0][0].img
+						}
+						console.log(dds)
+						
+						if(dds.user==$('.user').html()){
+							console.log(dds.img)
+							tag.addClass('my')
+							tag.html(`<span class="texts">${dds.msg}</span> <img class="images" src="${dds.img}" />`)
+							
+						}else{
+							console.log(dds.img)
+							tag.html(`<img class="images" src="${dds.img}" />${dds.user}：${dds.msg}`)
+						}
+						
+						$('#chats').append(tag)
+					}
+				})
+				
+				console.log(arr1)
+
+				arr1.slice(-1)
+				$('#textarea1').val('')
+				
+			})
+			
+
+
+
+
+
+
+			let fb=`<a href="http://10.25.160.69:8989/fabu" class="nav-a">发布</a>`
+			if($('.user').html()=='asd'){
+				$('.uls').append(fb)	
+
+			}
+		</script>
+	</body>
+</html>

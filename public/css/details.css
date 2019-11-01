@@ -1,0 +1,44 @@
+.none{
+	display: none;
+}
+.content-box{
+	max-width: 1000px;
+    margin: 0 auto;
+}
+.title{
+    font-size: 24px;
+    font-weight: 400;
+    padding: 20px 0 10px 0;
+    color: #38485A;
+}
+.userInfo{
+    width: 100%;
+    color: #999;
+    line-height: 18px;
+}
+.name{
+    margin-right: 20px;
+    padding-left: 20px;
+    background: url('../assets/user.png') no-repeat left center;
+}
+.date{
+    margin-right: 20px;
+    padding-left: 20px;
+    background: url('../assets/date.png') no-repeat left center;
+}
+.list-box{
+    text-indent: 2em;
+    line-height: 28px;
+    margin: 10px 0;
+}
+.left-box{
+	text-align: center;
+}
+.imgs{
+	
+	width: 400px;
+    height: 400px;
+}
+.space{
+	height: 100px;
+}

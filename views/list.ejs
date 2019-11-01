@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<link rel="stylesheet" href="../public/css/public.css">
+		<link rel="stylesheet" href="../public/css/index.css">
+	</head>
+	<body>
+		<div class="toptop">
+			<h1 class="h1">欢迎<span class="user"><%= user %></span>		
+				<form class="in-form" action="http://10.25.160.69:8989/esc" method="get">
+					<input class="bt" type="submit" value="退出">
+				</form>
+			</h1>
+			
+		</div>
+		
+		<div class="topnav">
+			<ul class="uls">
+				<a href="#" class="nav-a nav-active">首页</a>
+				<a href="http://10.25.160.69:8989/article" class="nav-a">Blog留言</a>
+				<a href="http://10.25.160.69:8989/chat" class="nav-a">聊天室</a>
+				
+			</ul>
+		</div>
+		<div class="box">
+			<h2 class="header">
+				您现在的位置是：<a href="#">首页</a>
+			</h2>
+		</div>
+		<div class="content-box">
+			<div class="content">
+				
+			</div>
+			<div class="as">
+				<span class="ll last">上一页</span>
+				<div class="limt">
+					<span>1</span>
+				</div>
+				<span class="ll next">下一页</span>
+			</div>
+		</div>
+		
+		<script src="../public/js/jquery-1.11.1.js"></script>
+
+		<script>
+			var tags=1;
+			var fb=`<a href="http://10.25.160.69:8989/fabu" class="nav-a">发布</a>`
+			if($('.user').html()=='asd'){
+				$('.uls').append(fb)	
+
+			}
+
+			$.ajax({
+				url:'http://10.25.160.69:8989/list',
+				method:'post',
+				dataType:'json',
+				success:function(data){
+
+					
+					for(let i=0;i<data.length;i++){
+						
+						let tag=$('<li class="lis"></li>')
+						let imgs=$('<img class="imgs" />')
+						tag.html(`
+									<div class="left-box">
+										<img src="${data[i].img}" class="imgs" alt="">
+									</div>
+									<div class="right-box">
+										<div class="title">${data[i].title}</div>
+										<div class="list-box">${data[i].content}</div>
+										<div class="userInfo">
+											<span class="name">${data[i].name}</span>
+											<span class="date">${data[i].date}</span>
+											<span class="none">${data[i]._id}</span>
+										</div>
+									</div>
+								
+									
+							`)
+						$('.content').append(tag)
+						// $('.imgs').attr('src',data[i].img)
+	
+					}
+					let del=$('<span class="dels"></span>')
+						del.html(`<span class="del" onclick="del(this)">X</span>`)
+						if($('.user').html()=='asd'){
+							$('.userInfo').append(del)	
+						}
+				}
+
+			})
+
+			function del(a){
+
+				$.ajax({
+						url:'http://10.25.160.69:8989/dellist',
+						method:'POST',
+						data:{
+							id:$(a).parents().siblings('.none').html()
+						},
+						dataType:'json',
+						success:function(data){
+							$(a).parents('.lis').remove()
+							if($('.lis').length==0){ 
+								console.log($('.limt span:last-child').html()-1)
+								$.ajax({
+								url:'http://10.25.160.69:8989/limts',
+									method:'POST',
+									data:{id:$('.limt span:last-child').html()-1},
+									dataType:'json',
+									success:function(data){
+
+										$('.content').html('')
+										for(let i=0;i<data.length;i++){	
+											let tag=$('<li class="lis"></li>')
+											let imgs=$('<img class="imgs" />')
+											tag.html(`
+													
+														<div class="left-box">
+															<img src="${data[i].img}" class="imgs" alt="">
+														</div>
+														<div class="right-box">
+															<div class="title">${data[i].title}</div>
+															<div class="list-box">${data[i].content}</div>
+															<div class="userInfo">
+																<span class="name">${data[i].name}</span>
+																<span class="date">${data[i].date}</span>
+																<span class="none">${data[i]._id}</span>
+															</div>
+														</div>
+														
+												`)
+											$('.content').append(tag)	
+										}
+										let del=$('<span class="dels"></span>')
+											del.html(`<span class="del" onclick="del(this)">X</span>`)
+											if($('.user').html()=='asd'){
+												$('.userInfo').append(del)	
+											}
+
+									}
+								})
+							}else{
+								$.ajax({
+									url:'http://10.25.160.69:8989/deladd',
+									method:'POST',
+									data:{id:$('.limtcolor').html()},
+									dataType:'json',
+									success:function(data){
+										if($('.limtcolor').html()!=$('.limt span:last-child').html()){
+											let tag=$('<li class="lis"></li>')
+											let imgs=$('<img class="imgs" />')
+											tag.html(`
+												
+													<div class="left-box">
+														<img src="${data[0].img}" class="imgs" alt="">
+													</div>
+													<div class="right-box">
+														<div class="title">${data[0].title}</div>
+														<div class="list-box">${data[0].content}</div>
+														<div class="userInfo">
+															<span class="name">${data[0].name}</span>
+															<span class="date">${data[0].date}</span>
+															<span class="none">${data[0]._id}</span>
+														</div>
+													</div>
+													
+												`)
+											$('.content').append(tag)
+										}
+										
+										
+									}	
+								})
+							}
+							
+						}	
+					})
+				$.ajax({
+					url:'http://10.25.160.69:8989/tag',
+						method:'get',
+						dataType:'json',
+						success:function(data){
+
+							$('.limt').html('')
+							
+							if(data.length%10==0){
+								var len=parseInt(data.length/10)
+							}else{
+								var len=parseInt(data.length/10)+1
+							}
+							
+							if(len==0){
+									len=1
+								}
+							for( var i=1; i<=len;i++){
+								let tag=$('<span class="slots"></span>');
+								tag.html(`${i}`)
+								$('.limt').append(tag)
+								
+							}
+							$('.limt span:first-child').addClass('limtcolor').siblings('span').removeClass('limtcolor')
+						}
+				})
+				a.stopPropagation();
+
+				// console.log(a)
+				// return false;
+			}
+
+			$.ajax({
+				url:'http://10.25.160.69:8989/tag',
+					method:'get',
+					dataType:'json',
+					success:function(data){
+
+						$('.limt').html('')
+						
+						if(data.length%10==0){
+							var len=parseInt(data.length/10)
+						}else{
+							var len=parseInt(data.length/10)+1
+						}
+						
+						console.log(data.length)
+						if(len==0){
+								len=1
+							}
+						for( var i=1; i<=len;i++){
+							let tag=$('<span class="slots"></span>');
+							tag.html(`${i}`)
+							$('.limt').append(tag)
+							
+						}
+						$('.limt span:first-child').addClass('limtcolor').siblings('span').removeClass('limtcolor')
+					}
+			})
+			$('.next').click(function(){
+				console.log('++')
+				let kk=$('.limt span:last-child').html()
+				if(tags!=kk){
+					tags++
+				}
+				let id=tags
+				$('.slots').eq(id-1).addClass('limtcolor').siblings('span').removeClass('limtcolor')
+				$.ajax({
+				url:'http://10.25.160.69:8989/next',
+					method:'POST',
+					data:{
+						id:id
+					},
+					dataType:'json',
+					success:function(data){
+						$('.content').html('')
+						for(let i=0;i<data.length;i++){	
+							let tag=$('<li class="lis"></li>')
+							let imgs=$('<img class="imgs" />')
+							tag.html(`
+									
+										<div class="left-box">
+											<img src="${data[i].img}" class="imgs" alt="">
+										</div>
+										<div class="right-box">
+											<div class="title">${data[i].title}</div>
+											<div class="list-box">${data[i].content}</div>
+											<div class="userInfo">
+												<span class="name">${data[i].name}</span>
+												<span class="date">${data[i].date}</span>
+												<span class="none">${data[i]._id}</span>
+											</div>
+										</div>
+										
+								`)
+							$('.content').append(tag)	
+						}
+						let del=$('<span class="dels"></span>')
+							del.html(`<span class="del" onclick="del(this)">X</span>`)
+							if($('.user').html()=='asd'){
+								$('.userInfo').append(del)	
+							}
+					}	
+				})	
+			})
+			$('.last').click(function(){
+				console.log(tags)
+				console.log('--')
+				let kk=$('.limt span:last-child').html()
+				if(tags!=1){
+					tags--
+				}
+				let id=tags
+				$('.slots').eq(id-1).addClass('limtcolor').siblings('span').removeClass('limtcolor')
+				$.ajax({
+				url:'http://10.25.160.69:8989/next',
+					method:'POST',
+					data:{
+						id:id
+					},
+					dataType:'json',
+					success:function(data){
+						$('.content').html('')
+						for(let i=0;i<data.length;i++){	
+							let tag=$('<li class="lis"></li>')
+							let imgs=$('<img class="imgs" />')
+							tag.html(`
+									
+										<div class="left-box">
+											<img src="${data[i].img}" class="imgs" alt="">
+										</div>
+										<div class="right-box">
+											<div class="title">${data[i].title}</div>
+											<div class="list-box">${data[i].content}</div>
+											<div class="userInfo">
+												<span class="name">${data[i].name}</span>
+												<span class="date">${data[i].date}</span>
+												<span class="none">${data[i]._id}</span>
+											</div>
+										</div>
+										
+								`)
+							$('.content').append(tag)	
+						}
+						let del=$('<span class="dels"></span>')
+							del.html(`<span class="del" onclick="del(this)">X</span>`)
+							if($('.user').html()=='asd'){
+								$('.userInfo').append(del)	
+							}
+					}	
+				})
+			})
+			$('.limt').on('click', '.slots', function() {
+				let id=$(this).html()
+				tags=id
+				console.log(tags)  
+				$.ajax({
+				url:'http://10.25.160.69:8989/limts',
+					method:'POST',
+					data:{id:id},
+					dataType:'json',
+					success:function(data){
+						$('.content').html('')
+						for(let i=0;i<data.length;i++){	
+							let tag=$('<li class="lis"></li>')
+							let imgs=$('<img class="imgs" />')
+							tag.html(`
+									
+										<div class="left-box">
+											<img src="${data[i].img}" class="imgs" alt="">
+										</div>
+										<div class="right-box">
+											<div class="title">${data[i].title}</div>
+											<div class="list-box">${data[i].content}</div>
+											<div class="userInfo">
+												<span class="name">${data[i].name}</span>
+												<span class="date">${data[i].date}</span>
+												<span class="none">${data[i]._id}</span>
+											</div>
+										</div>
+										
+								`)
+							$('.content').append(tag)	
+						}
+						let del=$('<span class="dels"></span>')
+							del.html(`<span class="del" onclick="del(this)">X</span>`)
+							if($('.user').html()=='asd'){
+								$('.userInfo').append(del)	
+							}
+
+					}
+				})
+				$(this).addClass('limtcolor').siblings('span').removeClass('limtcolor')
+
+			})
+
+			$('.content').on('click','.lis',function(){
+				let url=$(this).children('.right-box').children('.userInfo').children('.none').html()
+				location.href="http://10.25.160.69:8989/details?"+url;
+				console.log(123);
+			})
+
+
+		</script>
+	</body>
+</html>

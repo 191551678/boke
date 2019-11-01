@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<!-- <button id="local">local</button>
+	<span id="session">session</span><br> -->
+	<script>
+
+		if (localStorage.pagecount)
+			{
+			localStorage.pagecount=Number(localStorage.pagecount) +1;
+			}
+		else
+			{
+			localStorage.pagecount=1;
+			}
+		document.write("local访问次数: " + localStorage.pagecount + " 次");
+		if (sessionStorage.pagecount)
+			{
+			sessionStorage.pagecount=Number(sessionStorage.pagecount) +1;
+			}
+		else
+			{
+			sessionStorage.pagecount=1;
+			}
+		document.write("session访问次数: " + sessionStorage.pagecount + " 次");
+		// localStorage.name=1
+		// sessionStorage.name=1
+		// local.onClick=function(){
+		// 	localStorage.name++
+		// }
+		// session.onClick=function(){
+		// 	sessionStorage.name++
+		// }
+	</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="../public/css/my.css">
+</head>
+<body>
+<div class="basic-grey">
+	<form action="http://10.25.160.69:8989/login" method="post">
+		<h1>这是登陆页面</h1>
+		<input class="ipt" type="text" name="user" placeholder="请输入用户名" maxlength="7">
+		<input class="ipt" type="password" name="pass" placeholder="请输入密码" required>
+		<input class="button" type="submit">
+	</form>
+
+	<% if(user){ %>
+		<div class="signno">没有该用户</div>
+	<% } %>
+	
+
+	<a class="btna" href="<%= url %>sign">注册</a>
+	<a class="btna" href="<%= url %>updata1">修改密码</a>
+	
+</div>
+	
+	<script src="../public/js/jquery-1.11.1.js"></script>
+	<script>
+		$('input').focus(function(event) {
+			$('.signno').html('')
+		});
+	</script>
+		
+	
+
+</body>
+</html>

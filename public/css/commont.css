@@ -1,0 +1,226 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+li{
+	list-style: none;
+}
+body{
+	background-color: #fffbf0;
+}
+a{
+	text-decoration: none;
+}
+.box{
+	max-width: 1000px;
+	margin: 0 auto;
+
+}
+.toptop{
+	position: relative;
+	background-image: url('../assets/timg.jpg');
+	background-position: center 305px;
+	height: 200px;
+	background-size: 80%;
+	/* background-repeat: no-repeat; */
+}
+.article{
+	width: 678px;
+}
+.none{
+	display: none;
+}
+.comments li{
+	padding: 13px 0 11px;
+    border-bottom: 1px dashed #e5e5e5;
+}
+.userInfo{
+    line-height: 16px;
+    padding: 1px 0 0;
+    position: relative;
+}
+
+.userInfo .name{
+	color: #e74851;
+    margin-left: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    transform: translateY(-50%);
+}
+
+.userInfo .date{
+    float: right;
+    font-size: 12px;
+    padding: 5px 0 0;
+    font-family: Arial;
+    color: silver;
+    transform: translateY(50%);
+}
+.text{
+	padding: 12px 30px 12px 90px;
+}
+
+#textarea1{
+	width: 678px;
+   	border-color: #e74851;
+    margin: 0 8px;
+    height: 120px;
+    border-radius: 20px;
+    resize: none;
+    outline: none;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #fffbf0;
+
+}
+.textarea-bottom{
+	height: 30px;
+	padding: 10px 0;
+}
+.dels{
+	overflow: hidden;
+}
+.del{
+	float: right;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: 1px solid #e74851;
+	color: #e74851;
+	text-align: center;
+	line-height: 15px;
+	font-size: 12px;
+	cursor: pointer;
+}
+.header{
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 36px;
+    color: #333;
+    border-bottom: #db6d4c 4px solid;
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+.header a{
+	color: #666;
+}
+.h1{
+	font-size: 24px;
+	position: absolute;
+	left: 13%;
+	top: 20px;
+	font-size: 24px;
+	color: #666;
+}
+.topnav{
+	width: 100%;
+    background: #BFAB86;
+    height: 50px;
+    line-height: 47px;
+}
+.uls{
+	display: flex;
+	justify-content: space-around;
+	width: 1000px;
+	margin: 0 auto;
+}
+.uls .nav-a{
+	color: #fff;
+	font-size: 18px;
+    font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+    padding: 0 20px;
+    border-top: 4px solid transparent;
+}
+.nav-a:hover{
+	background: #fffbf0;
+    color: #000 !important;
+    border-top: 4px solid #f77825;
+}
+.nav-active{
+	background: #fffbf0;
+    color: #000 !important;
+    border-top: 4px solid #f77825 !important;
+}
+.type-list{
+    line-height: 30px;
+    height: 30px;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.type-list-active{
+	background-image: url('../assets/cmtlist-bg-active.png');
+	color: #e74851;
+    float: left;
+    width: 66px;
+    height: 29px;
+    text-align: center;
+    line-height: 30px;
+}
+.type-line{
+    position: relative;
+    bottom: 1px;
+    left: 66px;
+    width: 100%;
+    display: inline-block;
+    height: 1px;
+    z-index: 10;
+    background-color: #e74851;
+}
+.more{
+	width: 100%;
+    text-align: center;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    color: #999;
+    background: #f0f0f0;
+    cursor: pointer;
+    margin: 20px 0;
+}
+.images{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.btns {
+  z-index: 1;
+  position: relative;
+  font-size: inherit;
+  font-family: inherit;
+  color: white;
+  padding: 0.5em 1em;
+  outline: none;
+  border: none;
+  background-color: #e74851;
+  overflow: hidden;
+  transition: color 0.4s ease-in-out;
+  float: right;
+}
+
+.btns::before {
+  content: '';
+  z-index: -1;
+  position: absolute;
+  bottom: 100%;
+  right: 100%;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background-color: #3cefff;
+  transform-origin: center;
+  transform: translate3d(50%, 50%, 0) scale3d(0, 0, 0);
+  transition: transform 0.45s ease-in-out;
+}
+
+.btns:hover {
+  cursor: pointer;
+  color: #161616;
+}
+
+.btns:hover::before {
+  transform: translate3d(50%, 50%, 0) scale3d(15, 15, 15);
+}

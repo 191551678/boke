@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Document</title>
+		<link rel="stylesheet" href="../public/css/public.css">
+		<link rel="stylesheet" href="../public/css/details.css">
+	</head>
+	<body>
+		<div class="toptop">
+			<h1 class="h1">欢迎<span class="user"><%= user %></span>		
+				<form class="in-form" action="http://10.25.160.69:8989/esc" method="get">
+					<input class="bt" type="submit" value="退出">
+				</form>
+			</h1>
+			
+		</div>
+		
+		<div class="topnav">
+			<ul class="uls">
+				<a href="http://10.25.160.69:8989/list" class="nav-a">首页</a>
+				<a href="http://10.25.160.69:8989/article" class="nav-a">Blog留言</a>
+				<a href="http://10.25.160.69:8989/chat" class="nav-a">聊天室</a>
+				
+			</ul>
+		</div>
+		<div class="box">
+			<h2 class="header">
+				您现在的位置是：<a href="http://10.25.160.69:8989/list">首页</a> ><a href="#">文章</a>
+			</h2>
+		</div>
+
+
+
+		<div class="content-box">
+			
+		</div>
+
+
+
+
+		<div class="space"></div>
+		
+		
+
+		<script src="../public/js/jquery-1.11.1.js"></script>
+
+		<script>
+			var fb=`<a href="http://10.25.160.69:8989/fabu" class="nav-a">发布</a>`
+
+			if($('.user').html()=='asd'){
+				$('.uls').append(fb)	
+
+			}
+			var url = location.search; 
+			var str=url;
+			if ( url.indexOf( "?" ) != -1 ){
+				str = url.substr( 1 );
+			}
+			console.log(str)
+			$.ajax({
+				url:'http://10.25.160.69:8989/details',
+				method:'post',
+				data:{
+					id:str
+				},
+				dataType:'json',
+				success:function(data){
+					if(data){	
+						let tag=$('<li class="lis"></li>')
+						let imgs=$('<img class="imgs" />')
+						tag.html(`
+									
+									<div class="right-box">
+										<div class="title">${data[0].title}</div>
+										<div class="userInfo">
+											<span class="name">${data[0].name}</span>
+											<span class="date">${data[0].date}</span>
+											<span class="none">${data[0]._id}</span>
+										</div>
+										<div class="list-box">${data[0].content}</div>
+									</div>
+									<div class="left-box">
+										<img src="${data[0].img}" class="imgs" alt="">
+									</div>
+								
+									
+							`)
+						$('.content-box').append(tag)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
